@@ -1,0 +1,7 @@
+body {
+    margin: 0px;
+    min-height: 100vh;
+    background-color: #bada55;
+    display: grid;
+    place-items: center;
+}
