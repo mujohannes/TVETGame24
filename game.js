@@ -85,6 +85,7 @@ function update() {
         player.setVelocityX(0)
         player.anims.play('idle', true)
     }
+    // only jump if player is currently touching the "ground"
     if (control.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
