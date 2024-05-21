@@ -8,8 +8,10 @@ let moving = false
 let control
 // items
 let nuts
+// camera
+let camera
 
-function collectStar( test ) {
+function collectStar(test) {
     console.log(test)
 }
 
@@ -23,7 +25,7 @@ function preload() {
         frameWidth: 256, frameHeight: 512
     })
     //items
-    this.load.image('coconut','assets/items/Nut.png')
+    this.load.image('coconut', 'assets/items/Nut.png')
 }
 
 function create() {
@@ -48,13 +50,22 @@ function create() {
     platforms.create(750, 420, 'earth2')
     platforms.create(600, 570, 'earth')
     platforms.create(200, 570, 'earth2')
+    platforms.create(1000, 570, 'earth2')
+    platforms.create(1500, 570, 'earth')
+    platforms.create(1900, 570, 'earth')
+    platforms.create(2200, 570, 'earth')
     player = this.physics.add.sprite(200, 400, "thing")
     player.play("idle")
     player.setScale(0.15)
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
+    this.physics.world.setBounds(0, 0, 2400, 600)
     this.physics.add.collider(player, platforms)
-    
+    // --------- set up camera
+    camera = this.cameras.main
+    camera.setBounds(0, 0, 2400, 400)
+    camera.startFollow(player, true, 0.05, 0, -200, 120)
+
     control = this.input.keyboard.createCursorKeys()
     nuts = this.physics.add.group({
         key: 'coconut',
@@ -64,7 +75,7 @@ function create() {
     nuts.children.iterate(function (child) {
 
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
-    
+
     });
     this.physics.add.collider(nuts, platforms)
 
