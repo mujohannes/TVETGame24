@@ -12,6 +12,7 @@ let nuts
 let camera
 
 function collectStar(test) {
+    // code when 
     console.log(test)
 }
 
@@ -21,24 +22,37 @@ function preload() {
     this.load.image('background', 'assets/backgrounds/Background.png')
     this.load.image('earth2', 'assets/platforms/PlatformAlt.png')
     // player
-    this.load.spritesheet("thing", "assets/player/PlayerCharacter.png", {
-        frameWidth: 256, frameHeight: 512
-    })
+    // this.load.spritesheet("thing", "assets/player/PlayerCharacter.png", {
+    //     frameWidth: 256, frameHeight: 512
+    // })
+    this.load.atlas("thing", "assets/player/texture.png", "assets/player/texture.json")
     //items
     this.load.image('coconut', 'assets/items/Nut.png')
 }
 
 function create() {
+    // this.anims.create({
+    //     key: "idle",
+    //     frameRate: 6,
+    //     frames: this.anims.generateFrameNumbers("thing", { start: 0, end: 1 }),
+    //     repeat: -1
+    // })
     this.anims.create({
         key: "idle",
-        frameRate: 6,
-        frames: this.anims.generateFrameNumbers("thing", { start: 0, end: 1 }),
-        repeat: -1
+        frames: [
+            {key: "thing", frame: "0.png" },
+            {key: "thing", frame: "1.png" }
+        ],
+        repeat: -1,
+        frameRate: 6
     })
     this.anims.create({
         key: "moving",
         frameRate: 6,
-        frames: this.anims.generateFrameNumbers("thing", { start: 2, end: 3 }),
+        frames: [
+            {key: "thing", frame: "2.png" },
+            {key: "thing", frame: "3.png" }
+        ],
         repeat: -1
     })
     //---backgrounds
