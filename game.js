@@ -41,9 +41,14 @@ function create() {
         frames: this.anims.generateFrameNumbers("thing", { start: 2, end: 3 }),
         repeat: -1
     })
+    //---backgrounds
     this.add.image(400, 300, 'background')
+    this.add.image(1200, 300, 'background')
+    this.add.image(2000, 300, 'background')
 
+    //---platforms physics
     platforms = this.physics.add.staticGroup()
+    //---platforms
     platforms.create(750, 180, 'earth')
     platforms.create(50, 150, 'earth2')
     platforms.create(200, 320, 'earth')
@@ -54,7 +59,11 @@ function create() {
     platforms.create(1500, 570, 'earth')
     platforms.create(1900, 570, 'earth')
     platforms.create(2200, 570, 'earth')
-    player = this.physics.add.sprite(200, 400, "thing")
+    platforms.create(2400, 320, 'earth')
+    platforms.create(1800, 320, 'earth2')
+
+    //---player
+    player = this.physics.add.sprite(400, 500, "thing")
     player.play("idle")
     player.setScale(0.15)
     player.setBounce(0.2)
@@ -64,13 +73,13 @@ function create() {
     // --------- set up camera
     camera = this.cameras.main
     camera.setBounds(0, 0, 2400, 400)
-    camera.startFollow(player, true, 0.05, 0, -200, 120)
+    camera.startFollow(player, true, 1, 0, 200, 120)
 
     control = this.input.keyboard.createCursorKeys()
     nuts = this.physics.add.group({
         key: 'coconut',
-        repeat: 16,
-        setXY: { x: 12, y: 3, stepX: 40, stepY: 30 }
+        repeat: 32,
+        setXY: { x: 24, y: 3, stepX: 70, stepY: 0 }
     })
     nuts.children.iterate(function (child) {
 
