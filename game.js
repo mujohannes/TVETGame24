@@ -8,6 +8,7 @@ let moving = false
 let control
 // items
 let nuts
+let flamez
 // camera
 let camera
 
@@ -28,6 +29,7 @@ function preload() {
     this.load.atlas("thing", "assets/player/texture.png", "assets/player/texture.json")
     //items
     this.load.image('coconut', 'assets/items/Nut.png')
+    this.load.spritesheet('flamez', 'assets/items/Flamez.png', {frameWidth: 256, frameHeight: 256})
 }
 
 function create() {
@@ -53,6 +55,13 @@ function create() {
             {key: "thing", frame: "2.png" },
             {key: "thing", frame: "3.png" }
         ],
+        repeat: -1
+    })
+    //---items
+    this.anims.create({
+        key: "burning",
+        frames: this.anims.generateFrameNumbers("flamez", {start: 0, end: 1} ),
+        frameRate: 6,
         repeat: -1
     })
     //---backgrounds
@@ -93,7 +102,7 @@ function create() {
     nuts = this.physics.add.group({
         key: 'coconut',
         repeat: 32,
-        setXY: { x: 24, y: 3, stepX: 70, stepY: 0 }
+        setXY: { x: 24, y: 3, stepX: 60, stepY: 0 }
     })
     nuts.children.iterate(function (child) {
 
@@ -103,6 +112,17 @@ function create() {
     this.physics.add.collider(nuts, platforms)
 
     this.physics.add.overlap(player, nuts, collectStar, null, this)
+
+    flamez = this.physics.add.group({
+        key: 'flamez',
+        repeat: 16,
+        setXY: { x: 15, y: 10, stepX: 120, stepY: 2 }
+    })
+    flamez.children.iterate( function (child) {
+        child.play('burning')
+        child.setScale(0.2)
+    })
+    this.physics.add.collider( flamez, platforms )
 }
 function update() {
     if (control.left.isDown) {
