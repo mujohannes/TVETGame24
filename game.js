@@ -22,13 +22,18 @@ function touchingItem(player, item) {
         score += 10
     }
     else if( item.texture.key = 'fire' ) {
-        score -= 10
+        score -= 20
     }
     scoreText.setText('score: ' + score)
 }
 
+function randomNumber( limit ) {
+    return Math.floor( Math.random() * limit )
+}
+
 function preload() {
     // load platforms
+    this.load.image('block', 'assets/platforms/PlatformBlock-1.png')
     this.load.image('earth', 'assets/platforms/Platform-1.png.png')
     this.load.image('background', 'assets/backgrounds/Background.png')
     this.load.image('earth2', 'assets/platforms/PlatformAlt.png')
@@ -76,14 +81,14 @@ function create() {
     platforms.create(50, 150, 'earth2')
     platforms.create(200, 320, 'earth')
     platforms.create(750, 420, 'earth2')
-    platforms.create(600, 570, 'earth')
-    platforms.create(200, 570, 'earth2')
-    platforms.create(1000, 570, 'earth2')
-    platforms.create(1500, 570, 'earth')
-    platforms.create(1900, 570, 'earth')
-    platforms.create(2200, 570, 'earth')
     platforms.create(2400, 320, 'earth')
     platforms.create(1800, 320, 'earth2')
+    // floor
+    platforms.create(200, 570, 'earth2')
+    platforms.create(695, 568, 'earth')
+    platforms.create(1190, 570, 'earth2')
+    platforms.create(1680, 568, 'earth')
+    platforms.create(1900, 568, 'earth')
 
     //---player
     player = this.physics.add.sprite(400, 500, "thing")
@@ -101,13 +106,20 @@ function create() {
     camera.startFollow(player, true, 1, 0, 200, 120)
 
     control = this.input.keyboard.createCursorKeys()
+    console.log( control )
 
     // add nuts
-    nuts = this.physics.add.group({
-        key: 'coconut',
-        repeat: 32,
-        setXY: { x: 24, y: 3, stepX: 60, stepY: 0 }
-    })
+    // nuts = this.physics.add.group({
+    //     key: 'coconut',
+    //     repeat: 32,
+    //     setXY: { x: 24, y: 3, stepX: 60, stepY: 0 }
+    // })
+    nuts = this.physics.add.group()
+    for( let i=0; i < 16; i++ ) {
+        const x = randomNumber(2300)
+        const y = randomNumber(400)
+        nuts.create( x, y, 'coconut')
+    }
     nuts.children.iterate(function (child) {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
     })
@@ -115,11 +127,20 @@ function create() {
     this.physics.add.collider(nuts, platforms)
 
     // add fire
-    fire = this.physics.add.group({
-        key: 'fire',
-        repeat: 16,
-        setXY: { x: 15, y: 10, stepX: 120, stepY: 2 }
-    })
+    // fire = this.physics.add.group({
+    //     key: 'fire',
+    //     repeat: 12,
+    //     setXY: { x: 15, y: 10, stepX: randomNumber(30) , stepY: 2 }
+    // })
+    fire = this.physics.add.group()
+    let startX = 10
+    for( let i=0; i < 12; i++ ) {
+        const x = startX + (randomNumber(20) + 50)
+        const y = randomNumber(400)
+        fire.create( x, y, 'fire')
+        startX = startX + x
+    } 
+
     // make fire play its animation
     fire.children.iterate( function (child) {
         child.play('burning')
@@ -127,6 +148,8 @@ function create() {
     })
     // stop fire from falling through the platform
     this.physics.add.collider( fire, platforms )
+
+    this.physics.add.collider( fire, nuts )
 
     // when player touches an item
     this.physics.add.overlap(player, nuts, touchingItem, null, this)
@@ -153,7 +176,7 @@ function update() {
         player.anims.play('idle', true)
     }
     // only jump if player is currently touching the "ground"
-    if (control.up.isDown && player.body.touching.down) {
+    if ( (control.up.isDown || control.space.isDown) && player.body.touching.down) {
         player.setVelocityY(-330);
     }
 }
