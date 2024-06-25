@@ -89,6 +89,7 @@ function create() {
     platforms.create(1190, 570, 'earth2')
     platforms.create(1680, 568, 'earth')
     platforms.create(1900, 568, 'earth')
+    platforms.create(200,570, 'block')
 
     //---player
     player = this.physics.add.sprite(400, 500, "thing")
