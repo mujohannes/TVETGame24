@@ -40,7 +40,7 @@ function preload() {
     this.load.atlas("thing", "assets/player/texture.png", "assets/player/texture.json")
     //items
     this.load.image('coconut', 'assets/items/Nut.png')
-    this.load.spritesheet('fire', 'assets/items/flamez.png', {frameWidth: 256, frameHeight: 256})
+    this.load.spritesheet('fire', 'assets/items/Flamez.png', {frameWidth: 256, frameHeight: 256})
 }
 
 function create() {
@@ -76,21 +76,29 @@ function create() {
 
     //---platforms physics
     platforms = this.physics.add.staticGroup()
+    //---platforms coordinates
+    const platformsLocations = [
+        {x: 750, y: 180, kind: 'earth'},
+        {x: 50, y: 150, kind: 'earth2'},
+        {x: 200, y: 320, kind: 'earth'},
+        {x: 750, y: 420, kind: 'earth2'},
+        {x: 2400, y: 320, kind: 'earth'},
+        {x: 1800, y: 320, kind: 'earth2'},
+        {x: 200, y: 570, kind: 'earth2'},
+        {x: 695, y: 568, kind: 'earth'},
+        {x: 1190, y: 570, kind: 'earth2'},
+        {x: 1680, y: 568, kind: 'earth'},
+        {x: 1900, y: 568, kind: 'earth'},
+        {x: 200, y: 570, kind: 'block'},
+    ]
     //---platforms
-    platforms.create(750, 180, 'earth')
-    platforms.create(50, 150, 'earth2')
-    platforms.create(200, 320, 'earth')
-    platforms.create(750, 420, 'earth2')
-    platforms.create(2400, 320, 'earth')
-    platforms.create(1800, 320, 'earth2')
+    
     // floor
-    platforms.create(200, 570, 'earth2')
-    platforms.create(695, 568, 'earth')
-    platforms.create(1190, 570, 'earth2')
-    platforms.create(1680, 568, 'earth')
-    platforms.create(1900, 568, 'earth')
-    platforms.create(200,570, 'block')
-
+    platformsLocations.forEach( (item) => {
+        platforms.create(item.x, item.y, item.kind)
+    })
+    
+   
     //---player
     player = this.physics.add.sprite(400, 500, "thing")
     player.play("idle")
@@ -107,40 +115,38 @@ function create() {
     camera.startFollow(player, true, 1, 0, 200, 120)
 
     control = this.input.keyboard.createCursorKeys()
-    console.log( control )
-
-    // add nuts
-    // nuts = this.physics.add.group({
-    //     key: 'coconut',
-    //     repeat: 32,
-    //     setXY: { x: 24, y: 3, stepX: 60, stepY: 0 }
-    // })
+    let nutsPositions = [
+        {x:100, y: 10},
+        {x:250, y: 10},
+        {x:50, y: 200},
+        {x:100, y: 500},
+        {x:200, y: 500},
+        {x:500, y: 500},
+    ]
     nuts = this.physics.add.group()
-    for( let i=0; i < 16; i++ ) {
-        const x = randomNumber(2300)
-        const y = randomNumber(400)
-        nuts.create( x, y, 'coconut')
-    }
+    
+    nutsPositions.forEach( (item) => {
+        nuts.create( item.x, item.y, 'coconut')
+    })
     nuts.children.iterate(function (child) {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
     })
     // stop nuts from falling through the platforms 
     this.physics.add.collider(nuts, platforms)
 
-    // add fire
-    // fire = this.physics.add.group({
-    //     key: 'fire',
-    //     repeat: 12,
-    //     setXY: { x: 15, y: 10, stepX: randomNumber(30) , stepY: 2 }
-    // })
     fire = this.physics.add.group()
-    let startX = 10
-    for( let i=0; i < 12; i++ ) {
-        const x = startX + (randomNumber(20) + 50)
-        const y = randomNumber(400)
-        fire.create( x, y, 'fire')
-        startX = startX + x
-    } 
+    let firesPositions = [
+        {x:180, y: 10},
+        {x:600, y: 10},
+        {x:250, y: 200},
+        {x:100, y: 500},
+        {x:200, y: 500},
+        {x:500, y: 500},
+    ]
+    firesPositions.forEach( (item) => {
+        fire.create( item.x, item.y, 'fire')
+    })
+
 
     // make fire play its animation
     fire.children.iterate( function (child) {
