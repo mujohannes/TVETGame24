@@ -1,4 +1,5 @@
 // global variables
+/*
 let player
 let keypress
 let platforms
@@ -14,7 +15,43 @@ let camera
 // score
 let score = 0
 let scoreText
+*/
+class Opening extends Phaser.Scene {
+    constructor ()
+    {
+        super({ key: 'opening', active: true })
+    }
+    preload() {
+        this.load.image('startbg', 'assets/backgrounds/StartBG.jpeg')
+        this.load.image('startbtn','assets/buttons/StartBtn.jpeg')
+    }
+    create() {
+        this.add.image(400, 300, 'startbg')
+    }
+    update() {}
+}
 
+class Main extends Phaser.Scene {
+    constructor ()
+    {
+        super({ key: 'main', active: true })
+    }
+    preload() {}
+    create() {}
+    update() {}
+}
+
+/*
+class End extends Phaser.Scene{
+    constructor ()
+    {
+        super({ key: 'End' });
+    }
+    preload() {}
+    create() {}
+    update() {}
+}
+*/
 function touchingItem(player, item) {
     // disable item and remove from scene 
     item.disableBody( true, true )
@@ -30,7 +67,7 @@ function touchingItem(player, item) {
 function randomNumber( limit ) {
     return Math.floor( Math.random() * limit )
 }
-
+/*
 function preload() {
     // load platforms
     this.load.image('block', 'assets/platforms/PlatformBlock-1.png')
@@ -187,7 +224,7 @@ function update() {
         player.setVelocityY(-330);
     }
 }
-
+*/
 const gameConfig = {
     type: Phaser.AUTO,
     width: 800,
@@ -201,11 +238,7 @@ const gameConfig = {
             debug: false
         }
     },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
+    scene: ['Opening','Main']
 }
 
 const game = new Phaser.Game(gameConfig)
