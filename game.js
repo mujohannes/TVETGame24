@@ -1,5 +1,5 @@
 // global variables
-/*
+
 let player
 let keypress
 let platforms
@@ -15,43 +15,33 @@ let camera
 // score
 let score = 0
 let scoreText
-*/
-class Opening extends Phaser.Scene {
-    constructor ()
-    {
-        super({ key: 'opening', active: true })
-    }
-    preload() {
-        this.load.image('startbg', 'assets/backgrounds/StartBG.jpeg')
-        this.load.image('startbtn','assets/buttons/StartBtn.jpeg')
-    }
-    create() {
-        this.add.image(400, 300, 'startbg')
-    }
-    update() {}
-}
 
-class Main extends Phaser.Scene {
-    constructor ()
-    {
-        super({ key: 'main', active: true })
-    }
-    preload() {}
-    create() {}
-    update() {}
-}
+// fires locations
+let firesPositions = [
+    {x:180, y: 10},
+    {x:600, y: 10},
+    {x:250, y: 200},
+    {x:100, y: 500},
+    {x:200, y: 500},
+    {x:500, y: 500},
+]
+// platforms
+const platformsLocations = [
+    {x: 750, y: 180, kind: 'earth'},
+    {x: 50, y: 150, kind: 'earth2'},
+    {x: 200, y: 320, kind: 'earth'},
+    {x: 750, y: 420, kind: 'earth2'},
+    {x: 2400, y: 320, kind: 'earth'},
+    {x: 1800, y: 320, kind: 'earth2'},
+    {x: 200, y: 570, kind: 'earth2'},
+    {x: 695, y: 568, kind: 'earth'},
+    {x: 1190, y: 570, kind: 'earth2'},
+    {x: 1680, y: 568, kind: 'earth'},
+    {x: 1900, y: 568, kind: 'earth'},
+    {x: 200, y: 570, kind: 'block'},
+]
 
-/*
-class End extends Phaser.Scene{
-    constructor ()
-    {
-        super({ key: 'End' });
-    }
-    preload() {}
-    create() {}
-    update() {}
-}
-*/
+
 function touchingItem(player, item) {
     // disable item and remove from scene 
     item.disableBody( true, true )
@@ -67,7 +57,7 @@ function touchingItem(player, item) {
 function randomNumber( limit ) {
     return Math.floor( Math.random() * limit )
 }
-/*
+
 function preload() {
     // load platforms
     this.load.image('block', 'assets/platforms/PlatformBlock-1.png')
@@ -113,21 +103,7 @@ function create() {
 
     //---platforms physics
     platforms = this.physics.add.staticGroup()
-    //---platforms coordinates
-    const platformsLocations = [
-        {x: 750, y: 180, kind: 'earth'},
-        {x: 50, y: 150, kind: 'earth2'},
-        {x: 200, y: 320, kind: 'earth'},
-        {x: 750, y: 420, kind: 'earth2'},
-        {x: 2400, y: 320, kind: 'earth'},
-        {x: 1800, y: 320, kind: 'earth2'},
-        {x: 200, y: 570, kind: 'earth2'},
-        {x: 695, y: 568, kind: 'earth'},
-        {x: 1190, y: 570, kind: 'earth2'},
-        {x: 1680, y: 568, kind: 'earth'},
-        {x: 1900, y: 568, kind: 'earth'},
-        {x: 200, y: 570, kind: 'block'},
-    ]
+    
     //---platforms
     
     // floor
@@ -172,14 +148,7 @@ function create() {
     this.physics.add.collider(nuts, platforms)
 
     fire = this.physics.add.group()
-    let firesPositions = [
-        {x:180, y: 10},
-        {x:600, y: 10},
-        {x:250, y: 200},
-        {x:100, y: 500},
-        {x:200, y: 500},
-        {x:500, y: 500},
-    ]
+    
     firesPositions.forEach( (item) => {
         fire.create( item.x, item.y, 'fire')
     })
@@ -224,7 +193,7 @@ function update() {
         player.setVelocityY(-330);
     }
 }
-*/
+
 const gameConfig = {
     type: Phaser.AUTO,
     width: 800,
@@ -238,7 +207,11 @@ const gameConfig = {
             debug: false
         }
     },
-    scene: ['Opening','Main']
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
 }
 
 const game = new Phaser.Game(gameConfig)
